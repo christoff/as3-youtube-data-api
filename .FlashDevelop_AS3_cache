@@ -1,0 +1,579 @@
+
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\net\SocketURLLoader.as
+package ca.newcommerce.youtube.net{import flash.net.*;import flash.events.*;import flash.system.Security;import flash.errors.EOFError;import com.adobe.net.URI;import flash.utils.Timer;import flash.errors.IOError;import com.adobe.utils.StringUtil;public dynamic class SocketURLLoader extends EventDispatcher{private var _httpSocket : Socket;private var _httpURI : URI;private var _httpMethod : String;private var _request : URLRequest;private var _headersServed : Boolean;private var _responseHeaders : Object;private var _data : String;private var _bytesLoaded : int;private var _bytesTotal : int;private var _tmpStr : String;private var _secondTimer : Timer;private var _busyCursor : Boolean;private var _requestTimeOut : Number;public function get data () : String;public function set method (method:String) : Void;public function set showBusyCursor (t:Boolean) : Void;public function set requestTimeout (t:Number) : Void;public function get responseHeaders () : Object;public function get bytesLoaded () : int;public function SocketURLLoader ();private function onConnectEvent (event:Event) : void;private function onCloseEvent (event:Event) : void;private function onIOErrorEvent (event:IOErrorEvent) : void;private function onSecurityErrorEvent (event:SecurityErrorEvent) : void;private function onSocketDataEvent (event:ProgressEvent) : void;private function sendHeaders () : void;private function timeout () : void;public function stopTimer () : void;private function timeoutComplete () : void;private function setBusyCursor () : void;public function hideBusyCursor () : void;public function load (request:URLRequest) : void;public function close () : void;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\DataTracer.as
+package ca.newcommerce.youtube{import ca.newcommerce.youtube.data.*;import ca.newcommerce.youtube.events.CommentFeedEvent;import ca.newcommerce.youtube.events.ContactFeedEvent;import ca.newcommerce.youtube.feeds.*;import ca.newcommerce.youtube.iterators.*;public class DataTracer{public static function traceVideos (videoFeed:VideoFeed) : void;public static function traceAbstractFeed (preset:String, afeed:AbstractFeed) : void;public static function tracePlaylists (playlists:PlaylistFeed) : void;public static function traceContacts (contacts:ContactFeed) : void;protected static function traceContact (contact:ContactData) : void;public static function traceComments (comments:CommentFeed) : void;protected static function traceComment (comment:CommentData) : void;public static function traceSubscriptions (subFeed:SubscriptionFeed) : void;protected static function tracePlaylist (playlist:PlaylistData) : void;protected static function traceVideo (video:VideoData) : void;protected static function traceThumbnails (thumbnails:ThumbnailIterator) : void;protected static function traceGenerator (generator:GeneratorData) : void;protected static function traceMediaGroup (mediaGroup:MediaGroupData) : void;protected static function traceMediaContent (contentFeed:MediaContentIterator) : void;protected static function traceSubscription (sub:SubscriptionData) : void;protected static function traceAuthors (authors:AuthorIterator) : void;protected static function traceCategories (categories:CategoryIterator) : void;protected static function traceStatistics (stats:StatisticsData) : void;protected static function traceLinks (links:LinkIterator) : void;protected static function traceFeedLinks (feedLinks:FeedLinkIterator) : void;protected static function traceFeedLink (feedLink:FeedLinkData) : void;public static function traceProfile (user:ProfileData) : void;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\Test.as
+package ca.newcommerce.youtube{import ca.newcommerce.youtube.data.AuthorData;import ca.newcommerce.youtube.data.CategoryData;import ca.newcommerce.youtube.data.GeneratorData;import ca.newcommerce.youtube.data.LinkData;import ca.newcommerce.youtube.data.MediaContentData;import ca.newcommerce.youtube.data.MediaGroupData;import ca.newcommerce.youtube.data.RatingData;import ca.newcommerce.youtube.data.ThumbnailData;import ca.newcommerce.youtube.data.VideoData;import ca.newcommerce.youtube.events.CommentFeedEvent;import ca.newcommerce.youtube.events.ContactFeedEvent;import ca.newcommerce.youtube.events.PlaylistFeedEvent;import ca.newcommerce.youtube.events.ProfileEvent;import ca.newcommerce.youtube.events.ResponseFeedEvent;import ca.newcommerce.youtube.events.StandardVideoFeedEvent;import ca.newcommerce.youtube.events.SubscriptionFeedEvent;import ca.newcommerce.youtube.events.VideoFeedEvent;import ca.newcommerce.youtube.events.YouTubeEvent;import ca.newcommerce.youtube.webservice.YouTubeClient;import ca.newcommerce.youtube.feeds.VideoFeed;import ca.newcommerce.youtube.iterators.LinkIterator;import ca.newcommerce.youtube.iterators.ThumbnailIterator;import ca.newcommerce.youtube.iterators.CategoryIterator;import ca.newcommerce.youtube.iterators.MediaContentIterator;import ca.newcommerce.youtube.iterators.AuthorIterator;import com.adobe.serialization.json.JSON;import flash.display.MovieClip;import flash.events.Event;import flash.net.URLLoader;import flash.net.URLRequest;import flash.net.URLLoaderDataFormat;import flash.events.NetStatusEvent;import flash.events.IOErrorEvent;import flash.events.SecurityErrorEvent;import flash.events.ProgressEvent;public class Test extends MovieClip{protected var _ws : YouTubeClient;public function Test ();protected function initEvents () : void;protected function startTest () : void;protected function doLoggedIn (evt:YouTubeEvent) : void;protected function doRating (evt:YouTubeEvent) : void;protected function doVideosReady (evt:VideoFeedEvent) : void;protected function doSubscriptionsReady (evt:SubscriptionFeedEvent) : void;protected function doCommentFeedReady (evt:CommentFeedEvent) : void;protected function doContactsReady (evt:ContactFeedEvent) : void;protected function doPlaylistFeedReady (evt:PlaylistFeedEvent) : void;protected function doResponseFeedReady (evt:ResponseFeedEvent) : void;protected function doStandardVideoFeedReady (evt:StandardVideoFeedEvent) : void;protected function doRelatedVideosReady (evt:VideoFeedEvent) : void;protected function doFavoritesReady (evt:VideoFeedEvent) : void;protected function doVideoFeedReady (evt:VideoFeedEvent) : void;protected function doPlaylistReady (evt:VideoFeedEvent) : void;protected function doProfileReady (evt:ProfileEvent) : void;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\AbstractData.as
+package ca.newcommerce.youtube.data{public class AbstractData{public function AbstractData ();protected function fromObj (data:Object, index:String) : String;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\AuthorData.as
+package ca.newcommerce.youtube.data{public class AuthorData extends AbstractData{protected var _data : Object;public function get name () : String;public function get uri () : String;public function get username () : String;public function AuthorData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\CategoryData.as
+package ca.newcommerce.youtube.data{public class CategoryData extends AbstractData{protected var _data : Object;public function get scheme () : String;public function get term () : String;public function get label () : String;public function get text () : String;public function CategoryData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\CommentData.as
+package ca.newcommerce.youtube.data{import ca.newcommerce.youtube.iterators.AuthorIterator;import ca.newcommerce.youtube.iterators.CategoryIterator;import ca.newcommerce.youtube.iterators.LinkIterator;public class CommentData extends AbstractData{protected var _data : Object;public function get content () : String;public function get id () : String;public function get authors () : AuthorIterator;public function get title () : String;public function get categories () : CategoryIterator;public function get updated () : String;public function get links () : LinkIterator;public function get published () : String;public function CommentData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\ContactData.as
+package ca.newcommerce.youtube.data{import ca.newcommerce.youtube.iterators.CategoryIterator;import ca.newcommerce.youtube.iterators.LinkIterator;public class ContactData extends AbstractData{protected var _data : Object;public function get id () : String;public function get title () : String;public function get categories () : CategoryIterator;public function get status () : String;public function get username () : String;public function get updated () : String;public function get links () : LinkIterator;public function get published () : String;public function ContactData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\FeedLinkData.as
+package ca.newcommerce.youtube.data{public class FeedLinkData extends AbstractData{protected var _data : Object;public function get countHint () : Number;public function get rel () : String;public function get href () : String;public function FeedLinkData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\GeneratorData.as
+package ca.newcommerce.youtube.data{public class GeneratorData{protected var _data : Object;public function get text () : String;public function get uri () : String;public function get version () : String;public function GeneratorData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\LinkData.as
+package ca.newcommerce.youtube.data{public class LinkData extends AbstractData{protected var _data : Object;public function get rel () : String;public function get type () : String;public function get href () : String;public function LinkData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\MediaContentData.as
+package ca.newcommerce.youtube.data{public class MediaContentData{protected var _data : Object;public function get expression () : String;public function get duration () : Number;public function get isDefault () : Boolean;public function get type () : String;public function get format () : Number;public function get url () : String;public function MediaContentData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\MediaGroupData.as
+package ca.newcommerce.youtube.data{import ca.newcommerce.youtube.iterators.ThumbnailIterator;import ca.newcommerce.youtube.iterators.MediaContentIterator;import ca.newcommerce.youtube.iterators.CategoryIterator;public class MediaGroupData extends AbstractData{protected var _data : Object;public function get contents () : MediaContentIterator;public function get thumbnails () : ThumbnailIterator;public function get description () : String;public function get title () : String;public function get keywords () : Array;public function get duration () : Number;public function get mediaPlayerUri () : String;public function get categories () : CategoryIterator;public function MediaGroupData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\PlaylistData.as
+package ca.newcommerce.youtube.data{import ca.newcommerce.youtube.iterators.AuthorIterator;import ca.newcommerce.youtube.iterators.CategoryIterator;import ca.newcommerce.youtube.iterators.FeedLinkIterator;import ca.newcommerce.youtube.iterators.LinkIterator;public class PlaylistData extends AbstractData{protected var _data : Object;public function get feedLink () : FeedLinkData;public function get content () : String;public function get id () : String;/**
+* the actual ID to be used to fetch it..
+*/
+public function get actualId () : String;public function get authors () : AuthorIterator;public function get title () : String;public function get categories () : CategoryIterator;public function get updated () : String;public function get description () : String;public function get links () : LinkIterator;public function get published () : String;public function PlaylistData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\ProfileData.as
+package ca.newcommerce.youtube.data{import ca.newcommerce.youtube.iterators.AuthorIterator;import ca.newcommerce.youtube.iterators.CategoryIterator;import ca.newcommerce.youtube.iterators.FeedLinkIterator;import ca.newcommerce.youtube.iterators.LinkIterator;public class ProfileData extends AbstractData{protected var _data : Object;public function get feedLinks () : FeedLinkIterator;public function get location () : String;public function get username () : String;public function get links () : LinkIterator;public function get age () : Number;public function get statistics () : StatisticsData;public function get id () : String;public function get author () : AuthorIterator;public function get categories () : CategoryIterator;public function get firstname () : String;public function get lastname () : String;public function get title () : String;public function get updated () : String;public function get gender () : String;public function get published () : String;public function get books () : String;public function get company () : String;public function get hobbies () : String;public function get hometown () : String;public function get movies () : String;public function get music () : String;public function get occupation () : String;public function get school () : String;public function get relationship () : String;public function get thumbnail () : String;public function ProfileData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\RatingData.as
+package ca.newcommerce.youtube.data{public class RatingData{protected var _data : Object;public function get min () : Number;public function get max () : Number;public function get numRaters () : Number;public function get average () : Number;public function RatingData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\StatisticsData.as
+package ca.newcommerce.youtube.data{public class StatisticsData extends AbstractData{protected var _data : Object;public function get videoWatchCount () : Number;public function get lastWebAccess () : String;public function get viewCount () : Number;public function StatisticsData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\SubscriptionData.as
+package ca.newcommerce.youtube.data{import ca.newcommerce.youtube.iterators.AuthorIterator;import ca.newcommerce.youtube.iterators.CategoryIterator;import ca.newcommerce.youtube.iterators.FeedLinkIterator;import ca.newcommerce.youtube.iterators.LinkIterator;public class SubscriptionData extends AbstractData{protected var _data : Object;public static const FAVORITE_SUBSCRIPTION : String;public static const CHANNEL_SUBSCRIPTION : String;public static const QUERY_SUBSCRIPTION : String;public static const UNKNOWN_SUBSCRIPTION : String;public function get type () : String;public function get feedLink () : FeedLinkData;public function get id () : String;public function get authors () : AuthorIterator;public function get title () : String;public function get categories () : CategoryIterator;public function get username () : String;public function get queryString () : String;public function get updated () : String;public function get links () : LinkIterator;public function get published () : String;public function SubscriptionData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\ThumbnailData.as
+package ca.newcommerce.youtube.data{public class ThumbnailData{protected var _data : Object;public function get time () : String;public function get height () : Number;public function get width () : Number;public function get url () : String;public function ThumbnailData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\data\VideoData.as
+package ca.newcommerce.youtube.data{import ca.newcommerce.youtube.iterators.AuthorIterator;import ca.newcommerce.youtube.iterators.LinkIterator;import ca.newcommerce.youtube.iterators.CategoryIterator;import ca.newcommerce.youtube.iterators.MediaContentIterator;public class VideoData extends AbstractData{protected var _data : Object;public function get content () : String;public function get id () : String;public function get actualId () : String;public function get title () : String;public function get authors () : AuthorIterator;public function get categories () : CategoryIterator;public function get media () : MediaGroupData;public function get rating () : RatingData;public function get updated () : String;public function get links () : LinkIterator;public function get viewCount () : Number;public function get published () : String;public function get commentCount () : Number;public function get commentFeedUri () : String;public function get keywords () : Array;public function get categorywords () : Array;public function get swfUrl () : String;public function get mobileUrl () : String;public function get duration () : Number;public function VideoData (data:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\events\CommentFeedEvent.as
+package ca.newcommerce.youtube.events{import ca.newcommerce.youtube.feeds.CommentFeed;import flash.events.Event;public class CommentFeedEvent extends Event{public static const COMMENT_DATA_RECEIVED : String;protected var _requestId : Number;protected var _feed : CommentFeed;public function get requestId () : Number;public function get feed () : CommentFeed;public function CommentFeedEvent (type:String, requestId:Number, feed:CommentFeed);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\events\ContactFeedEvent.as
+package ca.newcommerce.youtube.events{import flash.events.Event;import ca.newcommerce.youtube.feeds.ContactFeed;public class ContactFeedEvent extends Event{public static const USER_DATA_RECEIVED : String;public static const USER_FEED_READY : String;protected var _feed : ContactFeed;protected var _requestId : Number;public function get requestId () : Number;public function get feed () : ContactFeed;public function ContactFeedEvent (type:String, requestId:Number, feed:ContactFeed);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\events\PlaylistFeedEvent.as
+package ca.newcommerce.youtube.events{import ca.newcommerce.youtube.feeds.PlaylistFeed;import flash.events.Event;public class PlaylistFeedEvent extends Event{public static const PLAYLIST_DATA_RECEIVED : String;protected var _username : String;protected var _requestId : Number;protected var _feed : PlaylistFeed;public function get feed () : PlaylistFeed;public function get requestId () : Number;public function get username () : String;public function PlaylistFeedEvent (type:String, requestId:Number, username:String, feed:PlaylistFeed);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\events\ProfileEvent.as
+package ca.newcommerce.youtube.events{import ca.newcommerce.youtube.data.ProfileData;import flash.events.Event;public class ProfileEvent extends Event{public static const PROFILE_DATA_RECEIVED : String;protected var _profile : ProfileData;protected var _requestId : Number;public function get profile () : ProfileData;public function get requestId () : Number;public function ProfileEvent (type:String, requestId:Number, profile:ProfileData);public function toString () : String;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\events\ResponseFeedEvent.as
+package ca.newcommerce.youtube.events{import ca.newcommerce.youtube.feeds.VideoFeed;import flash.events.Event;public class ResponseFeedEvent extends Event{public static const RESPONSES_DATA_RECEIVED : String;protected var _requestId : Number;protected var _videoId : String;protected var _feed : VideoFeed;public function get requestId () : Number;public function get feed () : VideoFeed;public function get videoId () : String;public function ResponseFeedEvent (type:String, requestId:Number, videoId:String, feed:VideoFeed);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\events\StandardVideoFeedEvent.as
+package ca.newcommerce.youtube.events{import ca.newcommerce.youtube.feeds.VideoFeed;import flash.events.Event;public class StandardVideoFeedEvent extends Event{public static const STANDARD_VIDEO_DATA_RECEIVED : String;protected var _requestId : Number;protected var _feedType : String;protected var _feed : VideoFeed;public function get feed () : VideoFeed;public function get requestId () : Number;public function get feedType () : String;public function StandardVideoFeedEvent (type:String, requestId:Number, feedType:String, feed:VideoFeed);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\events\SubscriptionFeedEvent.as
+package ca.newcommerce.youtube.events{import ca.newcommerce.youtube.feeds.SubscriptionFeed;import flash.events.Event;public class SubscriptionFeedEvent extends Event{public static const SUBSCRIPTION_DATA_RECEIVED : String;protected var _feed : SubscriptionFeed;protected var _requestId : Number;public function get requestId () : Number;public function get feed () : SubscriptionFeed;public function SubscriptionFeedEvent (type:String, requestId:Number, feed:SubscriptionFeed);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\events\VideoFeedEvent.as
+package ca.newcommerce.youtube.events{import flash.events.Event;import ca.newcommerce.youtube.feeds.VideoFeed;public class VideoFeedEvent extends Event{public static const VIDEO_DATA_RECEIVED : String;public static const VIDEO_PLAYLIST_DATA_RECEIVED : String;public static const VIDEO_RESPONSE_DATA_RECEIVED : String;public static const RELATED_VIDEOS_DATA_RECEIVED : String;public static const USER_FAVORITES_DATA_RECEIVED : String;public static const VIDEO_FEED_READY : String;protected var _feed : VideoFeed;protected var _requestId : Number;public function get feed () : VideoFeed;public function get requestId () : Number;public function VideoFeedEvent (type:String, requestId:Number, feed:VideoFeed);public function toString () : String;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\events\YouTubeEvent.as
+package ca.newcommerce.youtube.events{import flash.events.Event;public class YouTubeEvent extends Event{public static const RAW_URL_DATA_RECEIVED : String;public static const LOGIN_SUCCESSFULL : String;public static const RATING_SUCCESSFULL : String;protected var _requestId : Number;protected var _requestWrapper : Object;public function get requestId () : Number;public function get requestWrapper () : Object;public function YouTubeEvent (type:String, requestWrapper:Object);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\feeds\AbstractFeed.as
+package ca.newcommerce.youtube.feeds{import ca.newcommerce.youtube.data.AbstractData;import com.adobe.serialization.json.JSON;import ca.newcommerce.youtube.iterators.LinkIterator;import ca.newcommerce.youtube.iterators.AuthorIterator;import ca.newcommerce.youtube.iterators.CategoryIterator;import ca.newcommerce.youtube.data.GeneratorData;public class AbstractFeed extends AbstractData{protected var _entries : Array;protected var _data : Object;protected var _feedPointer : Number;public function get count () : Number;public function get logo () : String;public function get links () : LinkIterator;public function get totalResults () : Number;public function get startIndex () : Number;public function get itemsPerPage () : Number;public function get id () : String;public function get authors () : AuthorIterator;public function get categories () : CategoryIterator;public function get title () : String;public function get updated () : String;public function get generator () : GeneratorData;public function AbstractFeed (data:String);}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\feeds\CommentFeed.as
+package ca.newcommerce.youtube.feeds{import ca.newcommerce.youtube.data.CommentData;public class CommentFeed extends AbstractFeed{public function CommentFeed (rawData:String);public function getAt (pos:Number) : CommentData;public function first () : CommentData;public function next () : CommentData;public function last () : CommentData;public function previous () : CommentData;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\feeds\ContactFeed.as
+package ca.newcommerce.youtube.feeds{import ca.newcommerce.youtube.data.ContactData;public class ContactFeed extends AbstractFeed{public function ContactFeed (rawData:String);public function getAt (pos:Number) : ContactData;public function first () : ContactData;public function next () : ContactData;public function previous () : ContactData;public function last () : ContactData;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\feeds\PlaylistFeed.as
+package ca.newcommerce.youtube.feeds{import ca.newcommerce.youtube.data.PlaylistData;public class PlaylistFeed extends AbstractFeed{public function PlaylistFeed (rawData:String);public function getAt (pos:Number) : PlaylistData;public function first () : PlaylistData;public function next () : PlaylistData;public function last () : PlaylistData;public function previous () : PlaylistData;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\feeds\SubscriptionFeed.as
+package ca.newcommerce.youtube.feeds{import ca.newcommerce.youtube.data.SubscriptionData;public class SubscriptionFeed extends AbstractFeed{public function SubscriptionFeed (rawData:String);public function next () : SubscriptionData;public function first () : SubscriptionData;public function last () : SubscriptionData;public function getAt (pos:Number) : SubscriptionData;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\feeds\VideoFeed.as
+package ca.newcommerce.youtube.feeds{import ca.newcommerce.youtube.data.VideoData;public class VideoFeed extends AbstractFeed{public function VideoFeed (rawData:String);public function next () : VideoData;public function first () : VideoData;public function last () : VideoData;public function previous () : VideoData;public function getAt (pos:Number) : VideoData;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\iterators\AuthorIterator.as
+package ca.newcommerce.youtube.iterators{import ca.newcommerce.youtube.data.AuthorData;public class AuthorIterator{protected var _data : Array;protected var _feedPointer : Number;public function get count () : Number;public function AuthorIterator (data:Array);public function next () : AuthorData;public function first () : AuthorData;public function last () : AuthorData;public function getAt (pos:Number) : AuthorData;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\iterators\CategoryIterator.as
+package ca.newcommerce.youtube.iterators{import ca.newcommerce.youtube.data.CategoryData;public class CategoryIterator{protected var _data : Array;protected var _feedPointer;public function get count () : Number;public function get keywords () : Array;public function get categorywords () : Array;public function CategoryIterator (data:Array);public function getAt (pos:Number) : CategoryData;public function next () : CategoryData;public function previous () : CategoryData;public function first () : CategoryData;public function last () : CategoryData;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\iterators\FeedLinkIterator.as
+package ca.newcommerce.youtube.iterators{import ca.newcommerce.youtube.data.FeedLinkData;public class FeedLinkIterator{protected var _data : Array;protected var _feedPointer;public function get count () : Number;public function FeedLinkIterator (data:Array);public function getAt (pos:Number) : FeedLinkData;public function next () : FeedLinkData;public function first () : FeedLinkData;public function last () : FeedLinkData;public function previous () : FeedLinkData;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\iterators\LinkIterator.as
+package ca.newcommerce.youtube.iterators{import ca.newcommerce.youtube.data.LinkData;public class LinkIterator{protected var _data : Array;protected var _feedPointer;public function get count () : Number;public function LinkIterator (data:Array);public function getAt (pos:Number) : LinkData;public function next () : LinkData;public function first () : LinkData;public function last () : LinkData;public function previous () : LinkData;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\iterators\MediaContentIterator.as
+package ca.newcommerce.youtube.iterators{import ca.newcommerce.youtube.data.MediaContentData;public class MediaContentIterator{protected var _data : Array;protected var _feedPointer;public function get count () : Number;public function MediaContentIterator (data:Array);public function getAt (pos:Number) : MediaContentData;public function first () : MediaContentData;public function next () : MediaContentData;public function last () : MediaContentData;public function previous () : MediaContentData;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\iterators\ThumbnailIterator.as
+package ca.newcommerce.youtube.iterators{import ca.newcommerce.youtube.data.ThumbnailData;public class ThumbnailIterator{protected var _data : Array;protected var _feedPointer : Number;public function get count () : Number;public function ThumbnailIterator (data:Array);public function getAt (pos:Number) : ThumbnailData;public function first () : ThumbnailData;public function next () : ThumbnailData;public function last () : ThumbnailData;public function previous () : ThumbnailData;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\notes\XmlNotes.as
+package ca.newcommerce.youtube.notes{import com.adobe.xml.syndication.Namespaces;public class XmlNotes{protected var yt : Namespace;protected var media : Namespace;public function XmlNotes ();protected function parseRSS (data:String) : void;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\webservice\YouTubeClient.as
+package ca.newcommerce.youtube.webservice{import ca.newcommerce.youtube.DataTracer;import ca.newcommerce.youtube.events.ContactFeedEvent;import ca.newcommerce.youtube.events.PlaylistFeedEvent;import ca.newcommerce.youtube.events.ProfileEvent;import ca.newcommerce.youtube.events.StandardVideoFeedEvent;import ca.newcommerce.youtube.events.CommentFeedEvent;import ca.newcommerce.youtube.events.SubscriptionFeedEvent;import ca.newcommerce.youtube.events.VideoDataEvent;import ca.newcommerce.youtube.events.VideoFeedEvent;import ca.newcommerce.youtube.events.ResponseFeedEvent;import ca.newcommerce.youtube.events.YouTubeEvent;import ca.newcommerce.youtube.feeds.*;import ca.newcommerce.youtube.data.*;import flash.events.EventDispatcher;import flash.events.HTTPStatusEvent;import flash.net.URLRequestHeader;import flash.net.URLRequestMethod;import flash.net.URLVariables;import com.adobe.serialization.json.JSON;import flash.events.Event;import flash.net.URLLoader;import flash.net.URLRequest;import flash.net.URLLoaderDataFormat;import flash.events.NetStatusEvent;import flash.events.IOErrorEvent;import flash.events.SecurityErrorEvent;import flash.events.ProgressEvent;public class YouTubeClient extends EventDispatcher{protected var _requestQueue : Array;protected var _requestId : Number;protected var _sessionId : String;protected const _clientId : String;protected const _developerKey : String;protected var _auth : String;protected var _username : String;private static var _instance : YouTubeClient;public static const STD_TOP_RATED : String;public static const STD_TOP_FAVORITES : String;public static const STD_MOST_VIEWED : String;public static const STD_MOST_DISCUSSED : String;public static const STD_MOST_LINKED : String;public static const STD_MOST_RESPONSED : String;public static const STD_RECENTLY_FEATURED : String;public static const STD_MOBILE_VIDEOS : String;public static const TIME_TODAY : String;public static const TIME_WEEK : String;public static const TIME_MONTH : String;public static const TIME_ALL : String;public static const RACY_INCLUDE : String;public static const RACY_EXCLUDE : String;public static const ORDER_BY_PUBLISHED : String;public static const ORDER_BY_VIEWCOUNT : String;public static const ORDER_BY_RELEVANCE : String;public static function getInstance () : YouTubeClient;public function YouTubeClient ();protected function runLoader (request:URLRequest, doComplete:Function, wrapper:Object) : Number;public static function fromURL (url:String) : Number;protected function getLoaderIndex (loader:URLLoader) : Number;protected function getWrapper (loader:URLLoader) : Object;public function rawUrl (url:String) : Number;public function getPlaylist (playlistId:String, startIndex:Number = 1, maxResults:Number = 50) : Number;public function getUserContacts (username:String, categories:Array = null, startIndex:Number = 1, maxResults:Number = 50) : Number;public function getStandardFeed (type:String, time:String = "", startIndex:Number = 1, maxResults:Number = 50) : Number;public function getVideos (search:String = "", author:String = "", categories:Array = null, negativeCategories:Array = null, keywords:Array = null, negativeKeywords:Array = null, orderBy:String = "relevance", racy:String = "exclude", startIndex:Number = 1, maxResults:Number = 50) : Number;public function getVideo (videoId:String) : Number;public function getUserProfile (username:String) : Number;public function getVideoComments (videoId:String, startIndex:Number = 1, maxResults:Number = 50) : Number;public function getRelatedVideos (videoId:String, startIndex:Number = 1, maxResults:Number = 50) : Number;public function getUserSubscriptions (username:String, categories:Array = null, startIndex:Number = 1, maxResults:Number = 50) : Number;public function getUserFavorites (username:String, categories:Array = null, keywords:Array = null, startIndex:Number = 1, maxResults:Number = 50) : Number;public function getUserPlaylists (username:String, startIndex:Number = 1, maxResults:Number = 50) : Number;public function getVideoResponses (videoId:String) : Number;public function login (username:String, password:String) : Number;public function rate (videoId:String, rating:Number) : Number;public function favorite (videoId:String) : Number;public function unfavorite (videoId:String) : Number;protected function doUnfavorite (evt:Event) : void;protected function doFavorite (evt:Event) : void;protected function doRating (evt:Event) : void;protected function doLogin (evt:Event) : void;protected function doUserPlaylistsLoaded (evt:Event) : void;protected function doUserContactsLoaded (evt:Event) : void;protected function doUserFavoritesLoaded (evt:Event) : void;protected function doPlaylistLoaded (evt:Event) : void;protected function doRelatedVideosLoaded (evt:Event) : void;protected function doStdFeedLoaded (evt:Event) : void;protected function doRawUrlLoaded (evt:Event) : void;protected function doVideosLoaded (evt:Event) : void;protected function doCommentsLoaded (evt:Event) : void;public function doResponsesLoaded (evt:Event) : void;protected function doProfileLoaded (evt:Event) : void;protected function doSubscriptionsLoaded (evt:Event) : void;protected function doVideoLoaded (evt:Event) : void;protected function doHttpStatus (evt:HTTPStatusEvent) : void;/**
+* Event handler for IOErrorEvent.IO_ERROR on URLLoader		* @param	evt IOErrorEvent object
+*/
+protected function doIOError (evt:IOErrorEvent) : void;/**
+* Event handler for  SecurityErrorEvent.SECURITY_ERROR on URLLoader 		* @param	evt SecurityErrorEvent object
+*/
+protected function doSecurityError (evt:SecurityErrorEvent) : void;/**
+* Event handler for ProgressEvent.PROGRESS on URLLoader		* @param	evt ProgressEvent object
+*/
+protected function handleProgress (evt:ProgressEvent) : void;/**
+* Event handler for IoErrorEvent.IO_ERROR on URLLoader for getTracksById calls		* @param	evt IOErrorEvent object
+*/
+protected function handleIOError (evt:IOErrorEvent) : void;}}
+#file-cache C:\work\api research\youtube-google\com\adobe\serialization\json\JSON.as
+package com.adobe.serialization.json{/**
+* This class provides encoding and decoding of the JSON format.	 *	 * Example usage:	 * <code>	 * 		// create a JSON string from an internal object	 * 		JSON.encode( myObject );	 *	 *		// read a JSON string into an internal object	 *		var myObject:Object = JSON.decode( jsonString );	 *	</code>
+*/
+public class JSON{/**
+* Encodes a object into a JSON string.		 *		 * @param o The object to create a JSON string for		 * @return the JSON string representing o		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0		 * @tiptext
+*/
+public static function encode (o:Object) : String;/**
+* Decodes a JSON string into a native object.		 * 		 * @param s The JSON string representing the object		 * @return A native object as specified by s		 * @throw JSONParseError		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0		 * @tiptext
+*/
+public static function decode (s:String) : *;}}
+#file-cache C:\work\api research\youtube-google\com\adobe\serialization\json\JSONDecoder.as
+package com.adobe.serialization.json{public class JSONDecoder{/**
+The value that will get parsed from the JSON string
+*/
+private var value : *;/**
+The tokenizer designated to read the JSON string
+*/
+private var tokenizer : JSONTokenizer;/**
+The current token from the tokenizer
+*/
+private var token : JSONToken;/**
+* Constructs a new JSONDecoder to parse a JSON string 		 * into a native object.		 *		 * @param s The JSON string to be converted		 *		into a native object		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0		 * @tiptext
+*/
+public function JSONDecoder (s:String);/**
+* Gets the internal object that was created by parsing		 * the JSON string passed to the constructor.		 *		 * @return The internal object representation of the JSON		 * 		string that was passed to the constructor		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0		 * @tiptext
+*/
+public function getValue () : *;/**
+* Returns the next token from the tokenzier reading		 * the JSON string
+*/
+private function nextToken () : JSONToken;/**
+* Attempt to parse an array
+*/
+private function parseArray () : Array;/**
+* Attempt to parse an object
+*/
+private function parseObject () : Object;/**
+* Attempt to parse a value
+*/
+private function parseValue () : Object;}}
+#file-cache C:\work\api research\youtube-google\com\adobe\serialization\json\JSONEncoder.as
+package com.adobe.serialization.json{import flash.utils.describeType;public class JSONEncoder{/**
+The string that is going to represent the object we're encoding
+*/
+private var jsonString : String;/**
+* Creates a new JSONEncoder.		 *		 * @param o The object to encode as a JSON string		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0		 * @tiptext
+*/
+public function JSONEncoder (value:*);/**
+* Gets the JSON string from the encoder.		 *		 * @return The JSON string representation of the object		 * 		that was passed to the constructor		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0		 * @tiptext
+*/
+public function getString () : String;/**
+* Converts a value to it's JSON string equivalent.		 *		 * @param value The value to convert.  Could be any 		 *		type (object, number, array, etc)
+*/
+private function convertToString (value:*) : String;/**
+* Escapes a string accoding to the JSON specification.		 *		 * @param str The string to be escaped		 * @return The string with escaped special characters		 * 		according to the JSON specification
+*/
+private function escapeString (str:String) : String;/**
+* Converts an array to it's JSON string equivalent		 *		 * @param a The array to convert		 * @return The JSON string representation of <code>a</code>
+*/
+private function arrayToString (a:Array) : String;/**
+* Converts an object to it's JSON string equivalent		 *		 * @param o The object to convert		 * @return The JSON string representation of <code>o</code>
+*/
+private function objectToString (o:Object) : String;}}
+#file-cache C:\work\api research\youtube-google\com\adobe\serialization\json\JSONParseError.as
+package com.adobe.serialization.json{/**
+*	 *
+*/
+public class JSONParseError extends Error{/**
+The location in the string where the error occurred
+*/
+private var _location : int;/**
+The string in which the parse error occurred
+*/
+private var _text : String;/**
+* Provides read-only access to the location variable.		 *		 * @return The location in the string where the error occurred		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0		 * @tiptext
+*/
+public function get location () : int;/**
+* Provides read-only access to the text variable.		 *		 * @return The string in which the error occurred		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0		 * @tiptext
+*/
+public function get text () : String;/**
+* Constructs a new JSONParseError.		 *		 * @param message The error message that occured during parsing		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0		 * @tiptext
+*/
+public function JSONParseError (message:String = "", location:int = 0, text:String = "");}}
+#file-cache C:\work\api research\youtube-google\com\adobe\serialization\json\JSONToken.as
+package com.adobe.serialization.json{public class JSONToken{private var _type : int;private var _value : Object;/**
+* Returns the type of the token.		 *		 * @see com.adobe.serialization.json.JSONTokenType		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0		 * @tiptext
+*/
+public function get type () : int;/**
+* Sets the type of the token.		 *		 * @see com.adobe.serialization.json.JSONTokenType		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0		 * @tiptext
+*/
+public function set type (value:int) : Void;/**
+* Gets the value of the token		 *		 * @see com.adobe.serialization.json.JSONTokenType		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0		 * @tiptext
+*/
+public function get value () : Object;/**
+* Sets the value of the token		 *		 * @see com.adobe.serialization.json.JSONTokenType		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0		 * @tiptext
+*/
+public function set value (v:Object) : Void;/**
+* Creates a new JSONToken with a specific token type and value.		 *		 * @param type The JSONTokenType of the token		 * @param value The value of the token		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0		 * @tiptext
+*/
+public function JSONToken (type:int = -1, value:Object = null);}}
+#file-cache C:\work\api research\youtube-google\com\adobe\serialization\json\JSONTokenizer.as
+package com.adobe.serialization.json{public class JSONTokenizer{/**
+The object that will get parsed from the JSON string
+*/
+private var obj : Object;/**
+The JSON string to be parsed
+*/
+private var jsonString : String;/**
+The current parsing location in the JSON string
+*/
+private var loc : int;/**
+The current character in the JSON string during parsing
+*/
+private var ch : String;/**
+* Constructs a new JSONDecoder to parse a JSON string 		 * into a native object.		 *		 * @param s The JSON string to be converted		 *		into a native object
+*/
+public function JSONTokenizer (s:String);/**
+* Gets the next token in the input sting and advances		* the character to the next character after the token
+*/
+public function getNextToken () : JSONToken;/**
+* Attempts to read a string from the input string.  Places		 * the character location at the first character after the		 * string.  It is assumed that ch is " before this method is called.		 *		 * @return the JSONToken with the string value if a string could		 *		be read.  Throws an error otherwise.
+*/
+private function readString () : JSONToken;/**
+* Attempts to read a number from the input string.  Places		 * the character location at the first character after the		 * number.		 * 		 * @return The JSONToken with the number value if a number could		 * 		be read.  Throws an error otherwise.
+*/
+private function readNumber () : JSONToken;/**
+* Reads the next character in the input		 * string and advances the character location.		 *		 * @return The next character in the input string, or		 *		null if we've read past the end.
+*/
+private function nextChar () : String;/**
+* Advances the character location past any		 * sort of white space and comments
+*/
+private function skipIgnored () : void;/**
+* Skips comments in the input string, either		 * single-line or multi-line.  Advances the character		 * to the first position after the end of the comment.
+*/
+private function skipComments () : void;/**
+* Skip any whitespace in the input string and advances		 * the character to the first character after any possible		 * whitespace.
+*/
+private function skipWhite () : void;/**
+* Determines if a character is whitespace or not.		 *		 * @return True if the character passed in is a whitespace		 *	character
+*/
+private function isWhiteSpace (ch:String) : Boolean;/**
+* Determines if a character is a digit [0-9].		 *		 * @return True if the character passed in is a digit
+*/
+private function isDigit (ch:String) : Boolean;/**
+* Determines if a character is a digit [0-9].		 *		 * @return True if the character passed in is a digit
+*/
+private function isHexDigit (ch:String) : Boolean;/**
+* Raises a parsing error with a specified message, tacking		 * on the error location and the original string.		 *		 * @param message The message indicating why the error occurred
+*/
+public function parseError (message:String) : void;}}
+#file-cache C:\work\api research\youtube-google\com\adobe\serialization\json\JSONTokenType.as
+package com.adobe.serialization.json{/**
+* Class containing constant values for the different types	 * of tokens in a JSON encoded string.
+*/
+public class JSONTokenType{public static const UNKNOWN : int;public static const COMMA : int;public static const LEFT_BRACE : int;public static const RIGHT_BRACE : int;public static const LEFT_BRACKET : int;public static const RIGHT_BRACKET : int;public static const COLON : int;public static const TRUE : int;public static const FALSE : int;public static const NULL : int;public static const STRING : int;public static const NUMBER : int;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\events\VideoDataEvent.as
+package ca.newcommerce.youtube.events{import flash.events.Event;import ca.newcommerce.youtube.data.VideoData;public class VideoDataEvent extends Event{public static const VIDEO_INFO_RECEIVED : String;protected var _video : VideoData;protected var _requestId : Number;public function get video () : VideoData;public function get requestId () : Number;public function VideoDataEvent (type:String, requestId:Number, video:VideoData);public function toString () : String;}}
+#file-cache C:\work\api research\youtube-google\ca\newcommerce\youtube\net\SocketTester.as
+package ca.newcommerce.youtube.net{import ca.newcommerce.youtube.net.SocketURLLoader;import flash.display.MovieClip;import flash.events.Event;import flash.events.HTTPStatusEvent;import flash.net.URLRequest;import flash.system.Security;import flash.text.TextField;public class SocketTester extends MovieClip{protected var _socket : SocketURLLoader;protected var _field : TextField;public function SocketTester ();protected function runTest () : void;protected function doComplete (evt:Event) : void;protected function doHTTPStatus (evt:HTTPStatusEvent) : void;}}
+#file-cache C:\work\api research\youtube-google\com\adobe\net\DynamicURLLoader.as
+package com.adobe.net{import flash.net.URLLoader;/**
+* 	Class that provides a dynamic implimentation of the URLLoader class.	* 	* 	This class provides no API implimentations. However, since the class is	* 	declared as dynamic, it can be used in place of URLLoader, and allow	* 	you to dynamically attach properties to it (which URLLoader does not allow).	* 	* 	@langversion ActionScript 3.0	*	@playerversion Flash 9.0	*	@tiptext
+*/
+public dynamic class DynamicURLLoader extends URLLoader{public function DynamicURLLoader ();}}
+#file-cache C:\work\api research\youtube-google\com\adobe\net\IURIResolver.as
+package com.adobe.net{/**
+* The URI class cannot know about DNS aliases, virtual hosts, or	 * symbolic links that may be involved.  The application can provide	 * an implementation of this interface to resolve the URI before the	 * URI class makes any comparisons.  For example, a web host has	 * two aliases:	 * 	 * <p><code>	 *    http://www.site.com/	 *    http://www.site.net/	 * </code></p>	 * 	 * <p>The application can provide an implementation that automatically	 * resolves site.net to site.com before URI compares two URI objects.	 * Only the application can know and understand the context in which	 * the URI's are being used.</p>	 * 	 * <p>Use the URI.resolver accessor to assign a custom resolver to	 * the URI class.  Any resolver specified is global to all instances	 * of URI.</p>	 * 	 * <p>URI will call this before performing URI comparisons in the	 * URI.getRelation() and URI.getCommonParent() functions.	 * 	 * @see URI.getRelation	 * @see URI.getCommonParent	 * 	 * @langversion ActionScript 3.0	 * @playerversion Flash 9.0
+*/
+public interface IURIResolver{/**
+* Implement this method to provide custom URI resolution for		 * your application.		 * 		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0
+*/
+public function resolve (uri:URI) : URI;}}
+#file-cache C:\work\api research\youtube-google\com\adobe\net\URI.as
+package com.adobe.net{import flash.utils.ByteArray;/**
+* This class implements functions and utilities for working with URI's	 * (Universal Resource Identifiers).  For technical description of the	 * URI syntax, please see RFC 3986 at http://www.ietf.org/rfc/rfc3986.txt	 * or do a web search for "rfc 3986".	 * 	 * <p>The most important aspect of URI's to understand is that URI's	 * and URL's are not strings.  URI's are complex data structures that	 * encapsulate many pieces of information.  The string version of a	 * URI is the serialized representation of that data structure.  This	 * string serialization is used to provide a human readable	 * representation and a means to transport the data over the network	 * where it can then be parsed back into its' component parts.</p>	 * 	 * <p>URI's fall into one of three categories:	 * <ul>	 *  <li>&lt;scheme&gt;:&lt;scheme-specific-part&gt;#&lt;fragment&gt;		(non-hierarchical)</li>	 *  <li>&lt;scheme&gt;:<authority&gt;&lt;path&gt;?&lt;query&gt;#&lt;fragment&gt;	(hierarchical)</li>	 *  <li>&lt;path&gt;?&lt;query&gt;#&lt;fragment&gt;						(relative hierarchical)</li>	 * </ul></p>	 * 	 * <p>The query and fragment parts are optional.</p>	 * 	 * <p>This class supports both non-hierarchical and hierarchical URI's</p>	 * 	 * <p>This class is intended to be used "as-is" for the vast majority	 * of common URI's.  However, if your application requires a custom	 * URI syntax (e.g. custom query syntax or special handling of	 * non-hierarchical URI's), this class can be fully subclassed.  If you	 * intended to subclass URI, please see the source code for complete	 * documation on protected members and protected fuctions.</p>	 * 	 * @langversion ActionScript 3.0	 * @playerversion Flash 9.0
+*/
+public class URI{public static const URImustEscape : String;public static const URIbaselineEscape : String;public static const URIpathEscape : String;public static const URIqueryEscape : String;public static const URIqueryPartEscape : String;public static const URInonHierEscape : String;public static const UNKNOWN_SCHEME : String;protected static const URIbaselineExcludedBitmap : URIEncodingBitmap;protected static const URIschemeExcludedBitmap : URIEncodingBitmap;protected static const URIuserpassExcludedBitmap : URIEncodingBitmap;protected static const URIauthorityExcludedBitmap : URIEncodingBitmap;protected static const URIportExludedBitmap : URIEncodingBitmap;protected static const URIpathExcludedBitmap : URIEncodingBitmap;protected static const URIqueryExcludedBitmap : URIEncodingBitmap;protected static const URIqueryPartExcludedBitmap : URIEncodingBitmap;protected static const URIfragmentExcludedBitmap : URIEncodingBitmap;protected static const URInonHierexcludedBitmap : URIEncodingBitmap;public static const NOT_RELATED : int;public static const CHILD : int;public static const EQUAL : int;public static const PARENT : int;protected var _valid : Boolean;protected var _relative : Boolean;protected var _scheme : String;protected var _authority : String;protected var _username : String;protected var _password : String;protected var _port : String;protected var _path : String;protected var _query : String;protected var _fragment : String;protected var _nonHierarchical : String;protected static var _resolver : IURIResolver;/**
+* @private Accessor to explicitly set/get the hierarchical		 * state of the URI.
+*/
+protected function set hierState (state:Boolean) : Void;protected function get hierState () : Boolean;/**
+* The scheme of the URI.
+*/
+public function get scheme () : String;public function set scheme (schemeStr:String) : Void;/**
+* The authority (host) of the URI.  Only valid for		 * hierarchical URI's.  If the URI is relative, this will		 * be an empty string. When setting this value, the string		 * given is assumed to be unescaped.  When retrieving this		 * value, the resulting string is unescaped.
+*/
+public function get authority () : String;public function set authority (authorityStr:String) : Void;/**
+* The username of the URI.  Only valid for hierarchical		 * URI's.  If the URI is relative, this will be an empty		 * string.		 * 		 * <p>The URI specification allows for authentication		 * credentials to be embedded in the URI as such:</p>		 * 		 * <p>http://user:passwd@host/path/to/file.htm</p>		 * 		 * <p>When setting this value, the string		 * given is assumed to be unescaped.  When retrieving this		 * value, the resulting string is unescaped.</p>
+*/
+public function get username () : String;public function set username (usernameStr:String) : Void;/**
+* The password of the URI.  Similar to username.		 * @see URI.username
+*/
+public function get password () : String;public function set password (passwordStr:String) : Void;/**
+* The host port number.  Only valid for hierarchical URI's.  If		 * the URI is relative, this will be an empty string. URI's can		 * contain the port number of the remote host:		 * 		 * <p>http://site.com:8080/index.htm</p>
+*/
+public function get port () : String;public function set port (portStr:String) : Void;/**
+* The path portion of the URI.  Only valid for hierarchical		 * URI's.  When setting this value, the string		 * given is assumed to be unescaped.  When retrieving this		 * value, the resulting string is unescaped.		 * 		 * <p>The path portion can be in one of two formats. 1) an absolute		 * path, or 2) a relative path.  An absolute path starts with a		 * slash ('/'), a relative path does not.</p>		 * 		 * <p>An absolute path may look like:</p>		 * <listing>/full/path/to/my/file.htm</listing>		 * 		 * <p>A relative path may look like:</p>		 * <listing>		 * path/to/my/file.htm		 * ../images/logo.gif		 * ../../reports/index.htm		 * </listing>		 * 		 * <p>Paths can be absolute or relative.  Note that this not the same as		 * an absolute or relative URI.  An absolute URI can only have absolute		 * paths.  For example:</p>		 * 		 * <listing>http:/site.com/path/to/file.htm</listing>		 * 		 * <p>This absolute URI has an absolute path of "/path/to/file.htm".</p>		 * 		 * <p>Relative URI's can have either absolute paths or relative paths.		 * All of the following relative URI's are valid:</p>		 * 		 * <listing>		 * /absolute/path/to/file.htm		 * path/to/file.htm		 * ../path/to/file.htm		 * </listing>
+*/
+public function get path () : String;public function set path (pathStr:String) : Void;/**
+* The query (CGI) portion of the URI.  This part is valid for		 * both hierarchical and non-hierarchical URI's.		 * 		 * <p>This accessor should only be used if a custom query syntax		 * is used.  This URI class supports the common "param=value"		 * style query syntax via the get/setQueryValue() and		 * get/setQueryByMap() functions.  Those functions should be used		 * instead if the common syntax is being used.		 * 		 * <p>The URI RFC does not specify any particular		 * syntax for the query part of a URI.  It is intended to allow		 * any format that can be agreed upon by the two communicating hosts.		 * However, most systems have standardized on the typical CGI		 * format:</p>		 * 		 * <listing>http://site.com/script.php?param1=value1&param2=value2</listing>		 * 		 * <p>This class has specific support for this query syntax</p>		 * 		 * <p>This common query format is an array of name/value		 * pairs with its own syntax that is different from the overall URI		 * syntax.  The query has its own escaping logic.  For a query part		 * to be properly escaped and unescaped, it must be split into its		 * component parts.  This accessor escapes/unescapes the entire query		 * part without regard for it's component parts.  This has the		 * possibliity of leaving the query string in an ambiguious state in		 * regards to its syntax.  If the contents of the query part are		 * important, it is recommended that get/setQueryValue() or		 * get/setQueryByMap() are used instead.</p>		 * 		 * If a different query syntax is being used, a subclass of URI		 * can be created to handle that specific syntax.		 *  		 * @see URI.getQueryValue, URI.getQueryByMap
+*/
+public function get query () : String;public function set query (queryStr:String) : Void;/**
+* Accessor to the raw query data.  If you are using a custom query		 * syntax, this accessor can be used to get and set the query part		 * directly with no escaping/unescaping.  This should ONLY be used		 * if your application logic is handling custom query logic and		 * handling the proper escaping of the query part.
+*/
+public function get queryRaw () : String;public function set queryRaw (queryStr:String) : Void;/**
+* The fragment (anchor) portion of the URI.  This is valid for		 * both hierarchical and non-hierarchical URI's.
+*/
+public function get fragment () : String;public function set fragment (fragmentStr:String) : Void;/**
+* The non-hierarchical part of the URI.  For example, if		 * this URI object represents "mailto:somebody@company.com",		 * this will contain "somebody@company.com".  This is valid only		 * for non-hierarchical URI's.
+*/
+public function get nonHierarchical () : String;public function set nonHierarchical (nonHier:String) : Void;/**
+* Accessor to set and get the resolver object used by all URI		 * objects to dynamically resolve URI's before comparison.
+*/
+public static function set resolver (resolver:IURIResolver) : Void;public static function get resolver () : IURIResolver;/**
+*  URI Constructor.  If no string is given, this will initialize		 *  this URI object to a blank URI.
+*/
+public function URI (uri:String = null);/**
+* @private		 * Method that loads the URI from the given string.
+*/
+protected function constructURI (uri:String) : Boolean;/**
+* @private Private initializiation.
+*/
+protected function initialize () : void;/**
+* @private Functions that performs some basic consistency validation.
+*/
+protected function validateURI () : Boolean;/**
+* @private		 *		 * Given a URI in string format, parse that sucker into its basic		 * components and assign them to this object.  A URI is of the form:		 *    <scheme>:<authority><path>?<query>#<fragment>		 *		 * For simplicity, we parse the URI in the following order:		 * 				 *		1. Fragment (anchors)		 * 		2. Query	(CGI stuff)		 * 		3. Scheme	("http")		 * 		4. Authority (host name)		 * 		5. Username/Password (if any)		 * 		6. Port		(server port if any)		 *		7. Path		(/homepages/mypage.html)		 *		 * The reason for this order is to minimize any parsing ambiguities.		 * Fragments and queries can contain almost anything (they are parts		 * that can contain custom data with their own syntax).  Parsing		 * them out first removes a large chance of parsing errors.  This		 * method expects well formed URI's, but performing the parse in		 * this order makes us a little more tolerant of user error.		 * 		 * REGEXP		 * Why doesn't this use regular expressions to parse the URI?  We		 * have found that in a real world scenario, URI's are not always		 * well formed.  Sometimes characters that should have been escaped		 * are not, and those situations would break a regexp pattern.  This		 * function attempts to be smart about what it is parsing based on		 * location of characters relative to eachother.  This function has		 * been proven through real-world use to parse the vast majority		 * of URI's correctly.		 *		 * NOTE		 * It is assumed that the string in URI form is escaped.  This function		 * does not escape anything.  If you constructed the URI string by		 * hand, and used this to parse in the URI and still need it escaped,		 * call forceEscape() on your URI object.		 *		 * Parsing Assumptions		 * This routine assumes that the URI being passed is well formed.		 * Passing things like local paths, malformed URI's, and the such		 * will result in parsing errors.  This function can handle		 * 	 - absolute hierarchical (e.g. "http://something.com/index.html),		 *   - relative hi
+*/
+protected function parseURI (uri:String) : Boolean;/**
+* Copy function.
+*/
+public function copyURI (uri:URI) : void;/**
+* @private		 * Checks if the given string only contains a-z or A-Z.
+*/
+protected function verifyAlpha (str:String) : Boolean;/**
+* Is this a valid URI?		 * 		 * @return true if this object represents a valid URI, false		 * otherwise.
+*/
+public function isValid () : Boolean;/**
+* Is this URI an absolute URI?  An absolute URI is a complete, fully		 * qualified reference to a resource.  e.g. http://site.com/index.htm		 * Non-hierarchical URI's are always absolute.
+*/
+public function isAbsolute () : Boolean;/**
+* Is this URI a relative URI?  Relative URI's do not have a scheme		 * and only contain a relative path with optional anchor and query		 * parts.  e.g. "../reports/index.htm".  Non-hierarchical URI's		 * will never be relative.
+*/
+public function isRelative () : Boolean;/**
+* Does this URI point to a resource that is a directory/folder?		 * The URI specification dictates that any path that ends in a slash		 * is a directory.  This is needed to be able to perform correct path		 * logic when combining relative URI's with absolute URI's to		 * obtain the correct absolute URI to a resource.		 * 		 * @see URI.chdir		 * 		 * @return true if this URI represents a directory resource, false		 * if this URI represents a file resource.
+*/
+public function isDirectory () : Boolean;/**
+* Is this URI a hierarchical URI? URI's can be
+*/
+public function isHierarchical () : Boolean;/**
+* Quick shorthand accessor to set the parts of this URI.		 * The given parts are assumed to be in unescaped form.  If		 * the URI is non-hierarchical (e.g. mailto:) you will need		 * to call SetScheme() and SetNonHierarchical().
+*/
+public function setParts (schemeStr:String, authorityStr:String, portStr:String, pathStr:String, queryStr:String, fragmentStr:String) : void;/**
+* URI escapes the given character string.  This is similar in function		 * to the global encodeURIComponent() function in ActionScript, but is		 * slightly different in regards to which characters get escaped.  This		 * escapes the characters specified in the URIbaselineExluded set (see class		 * static members).  This is needed for this class to work properly.		 * 		 * <p>If a different set of characters need to be used for the escaping,		 * you may use fastEscapeChars() and specify a custom URIEncodingBitmap		 * that contains the characters your application needs escaped.</p>		 * 		 * <p>Never pass a full URI to this function.  A URI can only be properly		 * escaped/unescaped when split into its component parts (see RFC 3986		 * section 2.4).  This is due to the fact that the URI component separators		 * could be characters that would normally need to be escaped.</p>		 * 		 * @param unescaped character string to be escaped.		 * 		 * @return	escaped character string		 * 		 * @see encodeURIComponent		 * @see fastEscapeChars
+*/
+public static function escapeChars (unescaped:String) : String;/**
+* Unescape any URI escaped characters in the given character		 * string.		 * 		 * <p>Never pass a full URI to this function.  A URI can only be properly		 * escaped/unescaped when split into its component parts (see RFC 3986		 * section 2.4).  This is due to the fact that the URI component separators		 * could be characters that would normally need to be escaped.</p>		 * 		 * @param escaped the escaped string to be unescaped.		 * 		 * @return	unescaped string.
+*/
+public static function unescapeChars (escaped:String) : String;/**
+* Performance focused function that escapes the given character		 * string using the given URIEncodingBitmap as the rule for what		 * characters need to be escaped.  This function is used by this		 * class and can be used externally to this class to perform		 * escaping on custom character sets.		 * 		 * <p>Never pass a full URI to this function.  A URI can only be properly		 * escaped/unescaped when split into its component parts (see RFC 3986		 * section 2.4).  This is due to the fact that the URI component separators		 * could be characters that would normally need to be escaped.</p>		 * 		 * @param unescaped		the unescaped string to be escaped		 * @param bitmap		the set of characters that need to be escaped		 * 		 * @return	the escaped string.
+*/
+public static function fastEscapeChars (unescaped:String, bitmap:URIEncodingBitmap) : String;/**
+* Is this URI of a particular scheme type?  For example,		 * passing "http" to a URI object that represents the URI		 * "http://site.com/" would return true.		 * 		 * @param scheme	scheme to check for		 * 		 * @return true if this URI object is of the given type, false		 * otherwise.
+*/
+public function isOfType (scheme:String) : Boolean;/**
+* Get the value for the specified named in the query part.  This		 * assumes the query part of the URI is in the common		 * "name1=value1&name2=value2" syntax.  Do not call this function		 * if you are using a custom query syntax.		 * 		 * @param name	name of the query value to get.		 * 		 * @return the value of the query name, empty string if the		 * query name does not exist.
+*/
+public function getQueryValue (name:String) : String;/**
+* Set the given value on the given query name.  If the given name		 * does not exist, it will automatically add this name/value pair		 * to the query.  If null is passed as the value, it will remove		 * the given item from the query.		 * 		 * <p>This automatically escapes any characters that may conflict with		 * the query syntax so that they are "safe" within the query.  The		 * strings passed are assumed to be literal unescaped name and value.</p>		 * 		 * @param name	name of the query value to set		 * @param value	value of the query item to set.  If null, this will		 * force the removal of this item from the query.
+*/
+public function setQueryValue (name:String, value:String) : void;/**
+* Get the query of the URI in an Object class that allows for easy		 * access to the query data via Object accessors.  For example:		 * 		 * <listing>		 * var query:Object = uri.getQueryByMap();		 * var value:String = query["param"];    // get a value		 * query["param2"] = "foo";   // set a new value		 * </listing>		 * 		 * @return Object that contains the name/value pairs of the query.		 * 		 * @see #setQueryByMap		 * @see #getQueryValue		 * @see #setQueryValue
+*/
+public function getQueryByMap () : Object;/**
+* Set the query part of this URI using the given object as the		 * content source.  Any member of the object that has a value of		 * null will not be in the resulting query.		 * 		 * @param map	object that contains the name/value pairs as		 *    members of that object.		 * 		 * @see #getQueryByMap		 * @see #getQueryValue		 * @see #setQueryValue
+*/
+public function setQueryByMap (map:Object) : void;/**
+* Similar to Escape(), except this also escapes characters that		 * would conflict with the name/value pair query syntax.  This is		 * intended to be called on each individual "name" and "value"		 * in the query making sure that nothing in the name or value		 * strings contain characters that would conflict with the query		 * syntax (e.g. '=' and '&').		 * 		 * @param unescaped		unescaped string that is to be escaped.		 * 		 * @return escaped string.		 * 		 * @see #queryUnescape
+*/
+public static function queryPartEscape (unescaped:String) : String;/**
+* Unescape the individual name/value string pairs.		 * 		 * @param escaped	escaped string to be unescaped		 * 		 * @return unescaped string		 * 		 * @see #queryEscape
+*/
+public static function queryPartUnescape (escaped:String) : String;/**
+* Output this URI as a string.  The resulting string is properly		 * escaped and well formed for machine processing.
+*/
+public function toString () : String;/**
+* Output the URI as a string that is easily readable by a human.		 * This outputs the URI with all escape sequences unescaped to		 * their character representation.  This makes the URI easier for		 * a human to read, but the URI could be completely invalid		 * because some unescaped characters may now cause ambiguous parsing.		 * This function should only be used if you want to display a URI to		 * a user.  This function should never be used outside that specific		 * case.		 * 		 * @return the URI in string format with all escape sequences		 * unescaped.		 * 		 * @see #toString
+*/
+public function toDisplayString () : String;/**
+* @private		 * 		 * The guts of toString()
+*/
+protected function toStringInternal (forDisplay:Boolean) : String;/**
+* Forcefully ensure that this URI is properly escaped.		 * 		 * <p>Sometimes URI's are constructed by hand using strings outside		 * this class.  In those cases, it is unlikely the URI has been		 * properly escaped.  This function forcefully escapes this URI		 * by unescaping each part and then re-escaping it.  If the URI		 * did not have any escaping, the first unescape will do nothing		 * and then the re-escape will properly escape everything.  If		 * the URI was already escaped, the unescape and re-escape will		 * essentally be a no-op.  This provides a safe way to make sure		 * a URI is in the proper escaped form.</p>
+*/
+public function forceEscape () : void;/**
+* Does this URI point to a resource of the given file type?		 * Given a file extension (or just a file name, this will strip the		 * extension), check to see if this URI points to a file of that		 * type.		 * 		 * @param extension 	string that contains a file extension with or		 * without a dot ("html" and ".html" are both valid), or a file		 * name with an extension (e.g. "index.html").		 * 		 * @return true if this URI points to a resource with the same file		 * file extension as the extension provided, false otherwise.
+*/
+public function isOfFileType (extension:String) : Boolean;/**
+* Get the ".xyz" file extension from the filename in the URI.		 * For example, if we have the following URI:		 * 		 * <listing>http://something.com/path/to/my/page.html?form=yes&name=bob#anchor</listing>		 * 		 * <p>This will return ".html".</p>		 * 		 * @param minusDot   If true, this will strip the dot from the extension.		 * If true, the above example would have returned "html".		 * 		 * @return  the file extension
+*/
+public function getExtension (minusDot:Boolean = false) : String;/**
+* Quick function to retrieve the file name off the end of a URI.		 * 		 * <p>For example, if the URI is:</p>		 * <listing>http://something.com/some/path/to/my/file.html</listing>		 * <p>this function will return "file.html".</p>		 * 		 * @param minusExtension true if the file extension should be stripped		 * 		 * @return the file name.  If this URI is a directory, the return		 * value will be empty string.
+*/
+public function getFilename (minusExtension:Boolean = false) : String;/**
+* @private		 * Helper function to compare strings.		 * 		 * @return true if the two strings are identical, false otherwise.
+*/
+protected static function compareStr (str1:String, str2:String, sensitive:Boolean = true) : Boolean;/**
+* Based on the type of this URI (http, ftp, etc.) get		 * the default port used for that protocol.  This is		 * just intended to be a helper function for the most		 * common cases.
+*/
+public function getDefaultPort () : String;/**
+* @private		 * 		 * This resolves the given URI if the application has a		 * resolver interface defined.  This function does not		 * modify the passed in URI and returns a new URI.
+*/
+protected static function resolve (uri:URI) : URI;/**
+* Given another URI, return this URI object's relation to the one given.		 * URI's can have 1 of 4 possible relationships.  They can be unrelated,		 * equal, parent, or a child of the given URI.		 * 		 * @param uri	URI to compare this URI object to.		 * @param caseSensitive  true if the URI comparison should be done		 * taking case into account, false if the comparison should be		 * performed case insensitive.		 * 		 * @return URI.NOT_RELATED, URI.CHILD, URI.PARENT, or URI.EQUAL
+*/
+public function getRelation (uri:URI, caseSensitive:Boolean = true) : int;/**
+* Given another URI, return the common parent between this one		 * and the provided URI.		 * 		 * @param uri the other URI from which to find a common parent		 * @para caseSensitive true if this operation should be done		 * with case sensitive comparisons.		 * 		 * @return the parent URI if successful, null otherwise.
+*/
+public function getCommonParent (uri:URI, caseSensitive:Boolean = true) : URI;/**
+* This function is used to move around in a URI in a way similar		 * to the 'cd' or 'chdir' commands on Unix.  These operations are		 * completely string based, using the context of the URI to		 * determine the position within the path.  The heuristics used		 * to determine the action are based off Appendix C in RFC 2396.		 * 		 * <p>URI paths that end in '/' are considered paths that point to		 * directories, while paths that do not end in '/' are files.  For		 * example, if you execute chdir("d") on the following URI's:<br/>		 *    1.  http://something.com/a/b/c/  (directory)<br/>		 *    2.  http://something.com/a/b/c  (not directory)<br/>		 * you will get:<br/>		 *    1.  http://something.com/a/b/c/d<br/>		 *    2.  http://something.com/a/b/d<br/></p>		 * 		 * <p>See RFC 2396, Appendix C for more info.</p>		 * 		 * @param reference	the URI or path to "cd" to.		 * @param escape true if the passed reference string should be URI		 * escaped before using it.		 * 		 * @return true if the chdir was successful, false otherwise.
+*/
+public function chdir (reference:String, escape:Boolean = false) : Boolean;/**
+* @private		 * Join an array of path parts back into a URI style path string.		 * This is used by the various path logic functions to recombine		 * a path.  This is different than the standard Array.join()		 * function because we need to take into account the starting and		 * ending path delimiters if this is an absolute path or a		 * directory.		 * 		 * @param parts	the Array that contains strings of each path part.		 * @param isAbs		true if the given path is absolute		 * @param isDir		true if the given path is a directory		 * 		 * @return the combined path string.
+*/
+protected function joinPath (parts:Array, isAbs:Boolean, isDir:Boolean) : String;/**
+* Given an absolute URI, make this relative URI absolute using		 * the given URI as a base.  This URI instance must be relative		 * and the base_uri must be absolute.		 * 		 * @param base_uri	URI to use as the base from which to make		 * this relative URI into an absolute URI.		 * 		 * @return true if successful, false otherwise.
+*/
+public function makeAbsoluteURI (base_uri:URI) : Boolean;/**
+* Given a URI to use as a base from which this object should be		 * relative to, convert this object into a relative URI.  For example,		 * if you have:		 * 		 * <listing>		 * var uri1:URI = new URI("http://something.com/path/to/some/file.html");		 * var uri2:URI = new URI("http://something.com/path/to/another/file.html");		 * 		 * uri1.MakeRelativePath(uri2);</listing>		 * 		 * <p>uri1 will have a final value of "../some/file.html"</p>		 * 		 * <p>Note! This function is brute force.  If you have two URI's		 * that are completely unrelated, this will still attempt to make		 * the relative URI.  In that case, you will most likely get a		 * relative path that looks something like:</p>		 * 		 * <p>../../../../../../some/path/to/my/file.html</p>		 * 		 * @param base_uri the URI from which to make this URI relative		 * 		 * @return true if successful, false if the base_uri and this URI		 * are not related, of if error.
+*/
+public function makeRelativeURI (base_uri:URI, caseSensitive:Boolean = true) : Boolean;/**
+* Given a string, convert it to a URI.  The string could be a		 * full URI that is improperly escaped, a malformed URI (e.g.		 * missing a protocol like "www.something.com"), a relative URI,		 * or any variation there of.		 * 		 * <p>The intention of this function is to take anything that a		 * user might manually enter as a URI/URL and try to determine what		 * they mean.  This function differs from the URI constructor in		 * that it makes some assumptions to make it easy to import user		 * entered URI data.</p>		 * 		 * <p>This function is intended to be a helper function.		 * It is not all-knowning and will probably make mistakes		 * when attempting to parse a string of unknown origin.  If		 * your applicaiton is receiving input from the user, your		 * application should already have a good idea what the user		 * should  be entering, and your application should be		 * pre-processing the user's input to make sure it is well formed		 * before passing it to this function.</p>		 * 		 * <p>It is assumed that the string given to this function is		 * something the user may have manually entered.  Given this,		 * the URI string is probably unescaped or improperly escaped.		 * This function will attempt to properly escape the URI by		 * using forceEscape().  The result is that a toString() call		 * on a URI that was created from unknownToURI() may not match		 * the input string due to the difference in escaping.</p>		 *		 * @param unknown	a potental URI string that should be parsed		 * and loaded into this object.		 * @param defaultScheme	if it is determined that the passed string		 * looks like a URI, but it is missing the scheme part, this		 * string will be used as the missing scheme.		 * 		 * @return	true if the given string was successfully parsed into		 * a valid URI object, false otherwise.
+*/
+public function unknownToURI (unknown:String, defaultScheme:String = "http") : Boolean;}}
+#file-cache C:\work\api research\youtube-google\com\adobe\net\URIEncodingBitmap.as
+package com.adobe.net{import flash.utils.ByteArray;/**
+* This class implements an efficient lookup table for URI	 * character escaping.  This class is only needed if you	 * create a derived class of URI to handle custom URI	 * syntax.  This class is used internally by URI.	 * 	 * @langversion ActionScript 3.0	 * @playerversion Flash 9.0*
+*/
+public class URIEncodingBitmap extends ByteArray{/**
+* Constructor.  Creates an encoding bitmap using the given		 * string of characters as the set of characters that need		 * to be URI escaped.		 * 		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0
+*/
+public function URIEncodingBitmap (charsToEscape:String);/**
+* Based on the data table contained in this object, check		 * if the given character should be escaped.		 * 		 * @param char	the character to be escaped.  Only the first		 * character in the string is used.  Any other characters		 * are ignored.		 * 		 * @return	the integer value of the raw UTF8 character.  For		 * example, if '%' is given, the return value is 37 (0x25).		 * If the character given does not need to be escaped, the		 * return value is zero.		 * 		 * @langversion ActionScript 3.0		 * @playerversion Flash 9.0
+*/
+public function ShouldEscape (char:String) : int;}}
+#file-cache C:\work\api research\youtube-google\com\adobe\net\proxies\RFC2817Socket.as
+package com.adobe.net.proxies{import flash.events.Event;import flash.events.IOErrorEvent;import flash.events.ProgressEvent;import flash.net.Socket;/**
+* This class allows TCP socket connections through HTTP proxies in accordance with	 * RFC 2817:	 * 	 * ftp://ftp.rfc-editor.org/in-notes/rfc2817.txt	 * 	 * It can also be used to make direct connections to a destination, as well. If you	 * pass the host and port into the constructor, no proxy will be used. You can also	 * call connect, passing in the host and the port, and if you didn't set the proxy	 * info, a direct connection will be made. A proxy is only used after you have called	 * the setProxyInfo function.	 * 	 * The connection to and negotiation with the proxy is completely hidden. All the	 * same events are thrown whether you are using a proxy or not, and the data you	 * receive from the target server will look exact as it would if you were connected	 * to it directly rather than through a proxy.	 * 	 * @author Christian Cantrell	 *
+*/
+public class RFC2817Socket extends Socket{private var proxyHost : String;private var host : String;private var proxyPort : int;private var port : int;private var deferredEventHandlers : Object;private var buffer : String;/**
+* Construct a new RFC2817Socket object. If you pass in the host and the port,		 * no proxy will be used. If you want to use a proxy, instantiate with no		 * arguments, call setProxyInfo, then call connect.
+*/
+public function RFC2817Socket (host:String = null, port:int = 0);/**
+* Set the proxy host and port number. Your connection will only proxied if		 * this function has been called.
+*/
+public function setProxyInfo (host:String, port:int) : void;/**
+* Connect to the specified host over the specified port. If you want your		 * connection proxied, call the setProxyInfo function first.
+*/
+public function connect (host:String, port:int) : void;private function onConnect (event:Event) : void;private function onSocketData (event:ProgressEvent) : void;private function checkResponse (event:ProgressEvent) : void;private function redirectConnectEvent () : void;private function redirectSocketDataEvent () : void;public function addEventListener (type:String, listener:Function, useCapture:Boolean = false, priority:int = 0.0, useWeakReference:Boolean = false) : void;}}
+#file-cache C:\work\api research\youtube-google\com\adobe\utils\StringUtil.as
+package com.adobe.utils{/**
+* 	Class that contains static utility methods for manipulating Strings.
+	* 
+	* 	@langversion ActionScript 3.0
+	*	@playerversion Flash 9.0
+	*	@tiptext
+*/
+public class StringUtil{/**
+*	Does a case insensitive compare or two strings and returns true if
+		*	they are equal.
+		* 
+		*	@param s1 The first string to compare.
+		*
+		*	@param s2 The second string to compare.
+		*
+		*	@returns A boolean value indicating whether the strings' values are 
+		*	equal in a case sensitive compare.	
+		*
+		* 	@langversion ActionScript 3.0
+		*	@playerversion Flash 9.0
+		*	@tiptext
+*/
+public static function stringsAreEqual (s1:String, s2:String, caseSensitive:Boolean) : Boolean;/**
+*	Removes whitespace from the front and the end of the specified
+		*	string.
+		* 
+		*	@param input The String whose beginning and ending whitespace will
+		*	will be removed.
+		*
+		*	@returns A String with whitespace removed from the begining and end	
+		*
+		* 	@langversion ActionScript 3.0
+		*	@playerversion Flash 9.0
+		*	@tiptext
+*/
+public static function trim (input:String) : String;/**
+*	Removes whitespace from the front of the specified string.
+		* 
+		*	@param input The String whose beginning whitespace will will be removed.
+		*
+		*	@returns A String with whitespace removed from the begining	
+		*
+		* 	@langversion ActionScript 3.0
+		*	@playerversion Flash 9.0
+		*	@tiptext
+*/
+public static function ltrim (input:String) : String;/**
+*	Removes whitespace from the end of the specified string.
+		* 
+		*	@param input The String whose ending whitespace will will be removed.
+		*
+		*	@returns A String with whitespace removed from the end	
+		*
+		* 	@langversion ActionScript 3.0
+		*	@playerversion Flash 9.0
+		*	@tiptext
+*/
+public static function rtrim (input:String) : String;/**
+*	Determines whether the specified string begins with the spcified prefix.
+		* 
+		*	@param input The string that the prefix will be checked against.
+		*
+		*	@param prefix The prefix that will be tested against the string.
+		*
+		*	@returns True if the string starts with the prefix, false if it does not.
+		*
+		* 	@langversion ActionScript 3.0
+		*	@playerversion Flash 9.0
+		*	@tiptext
+*/
+public static function beginsWith (input:String, prefix:String) : Boolean;/**
+*	Determines whether the specified string ends with the spcified suffix.
+		* 
+		*	@param input The string that the suffic will be checked against.
+		*
+		*	@param prefix The suffic that will be tested against the string.
+		*
+		*	@returns True if the string ends with the suffix, false if it does not.
+		*
+		* 	@langversion ActionScript 3.0
+		*	@playerversion Flash 9.0
+		*	@tiptext
+*/
+public static function endsWith (input:String, suffix:String) : Boolean;/**
+*	Removes all instances of the remove string in the input string.
+		* 
+		*	@param input The string that will be checked for instances of remove
+		*	string
+		*
+		*	@param remove The string that will be removed from the input string.
+		*
+		*	@returns A String with the remove string removed.
+		*
+		* 	@langversion ActionScript 3.0
+		*	@playerversion Flash 9.0
+		*	@tiptext
+*/
+public static function remove (input:String, remove:String) : String;/**
+*	Replaces all instances of the replace string in the input string
+		*	with the replaceWith string.
+		* 
+		*	@param input The string that instances of replace string will be 
+		*	replaces with removeWith string.
+		*
+		*	@param replace The string that will be replaced by instances of 
+		*	the replaceWith string.
+		*
+		*	@param replaceWith The string that will replace instances of replace
+		*	string.
+		*
+		*	@returns A new String with the replace string replaced with the 
+		*	replaceWith string.
+		*
+		* 	@langversion ActionScript 3.0
+		*	@playerversion Flash 9.0
+		*	@tiptext
+*/
+public static function replace (input:String, replace:String, replaceWith:String) : String;}}
