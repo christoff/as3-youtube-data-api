@@ -46,6 +46,7 @@ package ca.newcommerce.youtube.webservice
 		// is a Singleton
 		private static var _instance:YouTubeFeedClient;	
 		
+		public static const STD_MOST_POPULAR:String = "most_popular";
 		public static const STD_TOP_RATED:String = "top_rated";
 		public static const STD_TOP_FAVORITES:String = "top_favorites";
 		public static const STD_MOST_VIEWED:String = "most_viewed";
@@ -205,7 +206,7 @@ package ca.newcommerce.youtube.webservice
 			return runLoader(request, doStdFeedLoaded, { comment: "standard_feed", type:type, time:time } );
 		}
 		
-		public function getVideos(search:String = "", author:String = "", categories:Array = null, negativeCategories:Array = null, keywords:Array = null, negativeKeywords:Array = null, orderBy:String = "relevance", racy:String = "exclude", startIndex:Number = 1, maxResults:Number = 50):Number
+		public function getVideos(search:String = "", time:String = "", author:String = "", categories:Array = null, negativeCategories:Array = null, keywords:Array = null, negativeKeywords:Array = null, orderBy:String = "relevance", racy:String = "exclude", startIndex:Number = 1, maxResults:Number = 50):Number
 		{
 			var url:String = "http://gdata.youtube.com/feeds/api/videos";
 			if (categories is Array && categories.length > 0)
@@ -220,6 +221,8 @@ package ca.newcommerce.youtube.webservice
 			}			
 			
 			url += "?alt=json&orderby=" + orderBy + "&racy=" + racy + "&start-index=" + startIndex + "&max-results=" + maxResults;
+			
+			if (time) url += "&time=" + time;
 			
 			if (search.length > 0)
 				url += "&vq=" + search;
