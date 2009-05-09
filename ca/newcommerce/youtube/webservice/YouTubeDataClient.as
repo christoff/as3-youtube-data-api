@@ -1,6 +1,7 @@
 ﻿package ca.newcommerce.youtube.webservice 
 {
-	import ca.newcommerce.youtube.events.SubscriptionFeedEvent;
+	import ca.newcommerce.youtube.events.YouTubeEvent;
+	
 	import flash.events.AsyncErrorEvent;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
@@ -8,7 +9,6 @@
 	import flash.events.SecurityErrorEvent;
 	import flash.net.NetConnection;
 	import flash.net.Responder;
-	import ca.newcommerce.youtube.events.YouTubeEvent;
 	
 	/**
 	* ...
@@ -20,6 +20,7 @@
 		protected const _clientId:String = "ytapi-MartinLegris-YoutubeDiscovery-rn7ifdis-0";
 		protected const _developerKey:String = "AI39si5ojvdQW_7wzbgApyTS1EMXiEfRVZtq4usxFYDFq6ZqEDiaSsPrkNLdFPwy97z9wyGtk6FPrc35H5B9LjugSQG5duueYg";
 		protected const _apName:String = "youtube_discovery_test";
+		protected const _apiVersion:Number = 2;
 		protected var _auth:String = "";
 		protected var _username:String = "";
 		
@@ -487,11 +488,14 @@
 		
 		protected function getStdHeaders():Array
 		{
-			var headers = ["Content-Type: application/atom+xml",
+			var headers:Array = ["Content-Type: application/atom+xml",
 			   "Authorization: GoogleLogin auth=" + _auth,
 			   "X-GData-Client: "+_clientId,
 			   "X-GData-Key: key=" + _developerKey];
-
+			   
+			if(_apiVersion && _apiVersion > 1){
+				headers.push('GData-Version: ' + _apiVersion);
+			}
 			return headers;
 		}
 		

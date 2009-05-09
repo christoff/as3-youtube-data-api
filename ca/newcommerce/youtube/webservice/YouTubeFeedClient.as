@@ -30,6 +30,7 @@ package ca.newcommerce.youtube.webservice
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
+	import flash.net.URLRequestHeader;
 	
 		
 	public class YouTubeFeedClient extends EventDispatcher
@@ -111,6 +112,9 @@ package ca.newcommerce.youtube.webservice
 		
 		protected function runLoader(request:URLRequest, doComplete:Function, wrapper:Object):Number
 		{
+			// add request headers for api version
+			request.requestHeaders = this.getStdHeaders();
+			
 			var loader:URLLoader = new URLLoader();			
 			loader.dataFormat = URLLoaderDataFormat.TEXT;
 			loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, doHttpStatus);
@@ -128,6 +132,14 @@ package ca.newcommerce.youtube.webservice
 			return _requestId - 1;
 		}
 		
+	  protected function getStdHeaders():Array
+    {
+      var header:URLRequestHeader = new URLRequestHeader('GData-Version','2');
+      var headers:Array = [header];
+      
+      return headers;
+    }
+    
 		/**
 		 * TODO: to be implemented
 		 * 
@@ -461,6 +473,7 @@ package ca.newcommerce.youtube.webservice
 				trace("WSClient.doIOError(" + evt.toString());
 			else
 				trace("success!");
+			this.dispatchEvent(evt.clone());
 		}
 		
 		/**
@@ -469,7 +482,8 @@ package ca.newcommerce.youtube.webservice
 		*/
 		protected function doSecurityError(evt:SecurityErrorEvent):void
 		{
-			trace("WSClient.doSecurityError("+evt.toString());			
+			trace("WSClient.doSecurityError("+evt.toString());
+			this.dispatchEvent(evt.clone());
 		}
 
 		/**

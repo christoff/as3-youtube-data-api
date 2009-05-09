@@ -32,8 +32,9 @@ package ca.newcommerce.youtube.data
 		
 		public function get actualId():String
 		{
-			var id:String = this.id;
-			return id.substr(id.lastIndexOf("/") + 1);
+			// var id:String = this.id;
+			// return id.substr(id.lastIndexOf("/") + 1);
+			return _data.media$group.yt$videoid.$t;
 		}
 		
 		public function get title():String
