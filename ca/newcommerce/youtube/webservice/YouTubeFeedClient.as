@@ -232,7 +232,9 @@ package ca.newcommerce.youtube.webservice
 				url += "/" + keywords.join("%7C");
 			}			
 			
-			url += "?alt=json&orderby=" + orderBy + "&racy=" + racy + "&start-index=" + startIndex + "&max-results=" + maxResults;
+			// took out racy for v2 compliance
+			// url += "?alt=json&orderby=" + orderBy + "&racy=" + racy + "&start-index=" + startIndex + "&max-results=" + maxResults;
+			url += "?alt=json&orderby=" + orderBy + "&start-index=" + startIndex + "&max-results=" + maxResults;
 			
 			if (time) url += "&time=" + time;
 			
