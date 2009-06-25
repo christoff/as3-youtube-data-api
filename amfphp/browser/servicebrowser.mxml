@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application frameRate="60" xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" creationComplete="setEndpoint(); ro.getServices(); init();" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
+<mx:Application frameRate="60" xmlns="http://ns.adobe.com/mxml/2009" xmlns:mx="library://ns.adobe.com/flex/halo" layout="vertical" creationComplete="setEndpoint(); ro.getServices(); init();" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
 	<mx:states>
 		<mx:State name="testService">
 			<mx:SetProperty target="{rightPanel}" name="visible" value="true"/>
@@ -15,7 +15,7 @@
 		</mx:State>
 		
 	</mx:states>
-	<mx:Script>
+	<Script>
 		<![CDATA[
 			import mx.controls.dataGridClasses.DataGridColumn;
 			import mx.controls.dataGridClasses.DataGridBase;
@@ -156,7 +156,7 @@
 			  }
 			}
 		]]>
-	</mx:Script>
+	</Script>
 	<mx:RemoteObject showBusyCursor="true" destination="amfphp" endpoint="http://flashservices/gateway.php" source="amfphp.DiscoveryService" id="ro">
 		<mx:method name="getServices" result="methodTree.dataProvider = event.result"/>
 		<mx:method name="describeService" result="describeService(event.result)" />
